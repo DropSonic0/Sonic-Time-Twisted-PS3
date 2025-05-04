@@ -1,5 +1,6 @@
 # Sonic Time Twisted PS3 port
 This is a port of the fan game Sonic Time Twisted for the PS3, the original source code can be found [here](https://github.com/overbound/SonicTimeTwisted).
+![PIC1](https://github.com/user-attachments/assets/5c7c6456-e844-4366-91ca-1fc33a2c9cba)
 
 ## Credits
 Original game by [Overbound Game Studio](https://overboundstudio.com).
