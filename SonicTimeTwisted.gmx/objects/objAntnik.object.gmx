@@ -46,7 +46,7 @@ offscreen_enabled = true;
 state = 0;
 frozen = false;
 // physics
-hspeed = 3;
+hspeed = 6; // Doubled for 30 FPS
 facing = 1;
 wall_facing = 0;
 cliff_facing = 0;
@@ -54,8 +54,8 @@ offset_x = (bbox_right-bbox_left)*0.5;
 offset_y = (bbox_bottom-y);
 // other
 speed_cap = 2.5;
-acceleration = 0.1;
-deceleration = 0.2;
+acceleration = 0.2; // Doubled for 30 FPS
+deceleration = 0.4; // Doubled for 30 FPS
 range_x = 75;
 range_y = 30;
 </string>
@@ -316,7 +316,7 @@ if facing==wall_facing or facing==cliff_facing
     // set to neutral state
     state = 0;
     image_index = 0;
-    alarm[0] = 60;
+    alarm[0] = 30; // Halved for 30 FPS
 }
 // chase players
 if (state!=4) and instance_exists(objPlayer)
@@ -325,15 +325,15 @@ if (state!=4) and instance_exists(objPlayer)
     if point_distance(objPlayer.x, 0, x, 0)&lt;range_x and point_distance(objPlayer.y, 0, y, 0)&lt;range_y and (facing xor (objPlayer.x&lt;x))
     {
         // charge if we're not already charging
-        if state!=3 {state = 3; if abs(hspeed)&lt;5 {image_index = 0; hspeed = 0; alarm[0] = 30;}}
+        if state!=3 {state = 3; if abs(hspeed)<5 {image_index = 0; hspeed = 0; alarm[0] = 15;}} // Halved for 30 FPS
     }
     else if state==3 and alarm[0]&lt;=0
     {
         // stop charging
         state = 0;
         image_index = 0;
-        hspeed = 5*facing;
-        alarm[0] = 40;
+        hspeed = 10*facing; // Doubled for 30 FPS
+        alarm[0] = 20; // Halved for 30 FPS
     }
 }
 // state machine
@@ -347,15 +347,15 @@ case 0: // normal
     break;
 case 1: // braking
     // turn around on complete stop
-    if hspeed==0 {state = 2; facing = -facing; alarm[0] = 10; break;}
+    if hspeed==0 {state = 2; facing = -facing; alarm[0] = 5; break; // Halved for 30 FPS}
     // decelerate
     if abs(hspeed)&gt;0 hspeed -= min(abs(hspeed), deceleration)*sign(hspeed);
     break;
 case 2: // turning
-    if not alarm[0] {state = 0; image_index = 0; alarm[0] = 60;}
+    if not alarm[0] {state = 0; image_index = 0; alarm[0] = 30; // Halved for 30 FPS}
     break;
 case 3: // charging
-    if not alarm[0] hspeed = 5*facing; 
+    if not alarm[0] hspeed = 10*facing; // Doubled for 30 FPS
     break;
 case 4: // jumping
     if not alarm[0] and collision_box(offset_x, offset_y+1, 0, objSolid) {state = 0; vspeed = 0; gravity = 0;}
@@ -388,7 +388,7 @@ if place_meeting(x,y+6,objLava) || place_meeting(x,y+6,objLavaSeep) {
     state = 5;
     hspeed=0;
     sprite_index = sprAntnikBurn;
-    image_speed = .25;
+    image_speed = .5; // Doubled for 30 FPS
 }
 </string>
           </argument>
@@ -413,7 +413,7 @@ if place_meeting(x,y+6,objLava) || place_meeting(x,y+6,objLavaSeep) {
           <argument>
             <kind>1</kind>
             <string>/// Freeze enemy
-alarm[1] = 180;
+alarm[1] = 90; // Halved for 30 FPS
 hspeed = 0;
 frozen = true;
 // destroy icicle
@@ -446,7 +446,7 @@ facing = -facing;
 // set to neutral state
 state = 0;
 image_index = 0;
-alarm[0] = 300;
+alarm[0] = 150; // Halved for 30 FPS
 }
 </string>
           </argument>
@@ -606,7 +606,7 @@ draw_set_alpha(1);
             <kind>1</kind>
             <string>/// Render ice block
 // get offset from time
-var offset = (-1+(((90-alarm[1]) div 4) mod 2)*2)*(alarm[1]&lt;45);
+var offset = (-1+(((45-alarm[1]) div 4) mod 2)*2)*(alarm[1]<22); // Adjusted for halved alarm[1] duration
 // draw ice block
 draw_sprite(sprShieldIceBlock, 0, x+offset, y);
 </string>

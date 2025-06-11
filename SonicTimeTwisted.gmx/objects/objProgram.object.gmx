@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>/// Initialize
+room_speed = 30; // Set game speed to 30 FPS
 
 // restore VM math precision as early as possible, if it's YYC.
 if (code_is_compiled()) {

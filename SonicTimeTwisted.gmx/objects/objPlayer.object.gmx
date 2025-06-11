@@ -134,12 +134,12 @@ waterrun_threshold = 4;
 roll_threshold = 1.03125;
 unroll_threshold = 0.5;
 brake_threshold = 4;
-air_friction = 0.96875;
-slope_friction = 0.078125;
-slope_friction_cap = 0.125;
-slope_friction_up = 0.071825;
-slope_friction_down = 0.3125;
-spindash_friction = 0.96875;
+air_friction = 0.9384765625; // (0.96875^2) for 30 FPS
+slope_friction = 0.15625; // Doubled for 30 FPS
+slope_friction_cap = 0.25; // Doubled for 30 FPS
+slope_friction_up = 0.14365; // Doubled for 30 FPS
+slope_friction_down = 0.625; // Doubled for 30 FPS
+spindash_friction = 0.9384765625; // (0.96875^2) for 30 FPS
 
 super_lose_rings = false;
 
@@ -255,7 +255,7 @@ if (animation_table&gt;-1) and ((animation!=animation_new) or animation_reset)
 image_alpha = 1-((invulnerable div 4) mod 2);
 
 // bubbles
-if (underwater_count mod 60)==0 &amp;&amp; state != player_state_path &amp;&amp; objProgram.cutscene == false with instance_create(x+facing*8, y-8, objBubble) {size = 1; offset = 180*(other.facing&lt;1);}
+if (underwater_count mod 30)==0 && state != player_state_path && objProgram.cutscene == false with instance_create(x+facing*8, y-8, objBubble) {size = 1; offset = 180*(other.facing<1);} // Halved for 30 FPS
 
 // brake dust
 if landed and (animation=="brake" or animation=="glide_slide") and not (objScreen.image_index mod 4) part_particles_create(objLevel.particles, x, y+offset_y-7, objResources.dust, 1);
@@ -301,14 +301,14 @@ if underwater and shield_type!=1 and !objProgram.cutscene
     underwater_count -= 1;
     switch underwater_count
     {
-        case 1440: case 1140: case 840: play_sfx(sndDrownTimer, 0); break;
-        case 660: case 550: case 440: case 330: case 220: case 110:
+        case 720: case 570: case 420: play_sfx(sndDrownTimer, 0); break; // Halved for 30 FPS
+        case 330: case 275: case 220: case 165: case 110: case 55: // Halved for 30 FPS
             play_sfx(sndDrownWarning, 0);
             waterCountTime = 100;
-            waterCountDigit = (underwater_count / 110) - 1;
+            waterCountDigit = (underwater_count / 55) - 1; // Divisor halved for 30 FPS
             waterCountAlpha = 0;
             break;
-        case 725: if player_id==0 { play_effect(bgmDrowning,0); } break;
+        case 363: if player_id==0 { play_effect(bgmDrowning,0); } break; // Halved for 30 FPS (approx)
         case 0: player_is_drowning(); break;
     }
 } else {
@@ -322,7 +322,7 @@ if superform
     {
         superform++;
         // subtract a ring every second
-        if (superform &gt;= 61)
+        if (superform >= 31) // Halved for 30 FPS
         {
             superform = 1;
             objGameData.rings[0] -= 1;
@@ -391,7 +391,7 @@ default: // normal activity
     camera.y = floor(y);
 
     // reset vertical panning
-    if (state!=player_state_look) and (state!=player_state_crouch) camera.offset_y -= 2*sign(camera.offset_y);
+    if (state!=player_state_look) and (state!=player_state_crouch) camera.offset_y -= 4*sign(camera.offset_y); // Doubled for 30 FPS
 
     // update listener
     if (player_id==0) audio_listener_position(camera.x, camera.y, 0);

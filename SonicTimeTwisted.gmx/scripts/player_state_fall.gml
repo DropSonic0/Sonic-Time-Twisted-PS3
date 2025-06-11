@@ -118,4 +118,4 @@ if jump_action
 }
 // animate
 if (animation=="rise") and (yspeed>=0) {animation_new = "walk"; timeline_speed = 0.125;}
-if not spinning and (image_angle!=angle) image_angle = angle_wrap(image_angle+2.8125*sign(angle_distance(image_angle, angle)));
+if not spinning and (image_angle!=angle) image_angle = angle_wrap(image_angle+5.625*sign(angle_distance(image_angle, angle))); // Doubled for 30 FPS

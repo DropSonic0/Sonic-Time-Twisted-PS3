@@ -42,7 +42,7 @@
             <string>/// Initialize
 image_speed = 0;
 offscreen_enabled = true;
-alarm[0]=164;
+alarm[0]=82; // Halved for 30 FPS
 bubble_id=instance_create(x,y,objBubblesRegion);
 bubble_id.visible=false;
 gain = 1;
@@ -106,8 +106,8 @@ frozen = false;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>alarm[0]=240;
-image_speed = .2;
+            <string>alarm[0]=120; // Halved for 30 FPS
+image_speed = .4; // Doubled for 30 FPS
 image_index = 5;
 </string>
           </argument>
@@ -136,9 +136,9 @@ bubble_id.allow_collision = true;
 gain = 1;
 play_sfx(sndBubblesShake, 4);
 
-alarm[1]=300;
+alarm[1]=150; // Halved for 30 FPS
 image_index = 1;
-image_speed = .2;
+image_speed = .4; // Doubled for 30 FPS
 </string>
           </argument>
         </arguments>
@@ -193,7 +193,7 @@ image_speed = .2;
     image_speed = 0;
 }
 if bubble_id.visible {
-    y = ystart+cos(objScreen.image_index);
+    y = ystart+cos(objScreen.image_index * 2); // Multiplied index for 30 FPS bobbing speed
     
     }else {
     y=ystart;
@@ -222,7 +222,7 @@ if bubble_id.visible {
           <argument>
             <kind>1</kind>
             <string>/// Freeze enemy
-alarm[1] = 180;
+alarm[1] = 90; // Halved for 30 FPS
 frozen = true;
 // destroy icicle
 with other instance_destroy();
@@ -252,7 +252,7 @@ with other instance_destroy();
 visible = false;
 active = false;
 allow_collision = false;
-alarm[0]=20; 
+alarm[0]=10; // Halved for 30 FPS
 with player_id player_is_falling();
 }
 image_speed =0;
